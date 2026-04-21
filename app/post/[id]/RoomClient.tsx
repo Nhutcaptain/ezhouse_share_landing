@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import styles from './styles.module.css'
 
 interface RoomClientProps {
@@ -15,6 +16,27 @@ export default function RoomClient({ data, id }: RoomClientProps) {
 
   const [activeImage, setActiveImage] = useState(images[0]?.fileUrl || '')
   const [activeIdx, setActiveIdx] = useState(0)
+  const searchParams = useSearchParams()
+  
+  // Giải mã SĐT từ Base64 (nếu có)
+  const encoded = searchParams.get('p')
+  const [sharedPhone, setSharedPhone] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (encoded) {
+      try {
+        const decoded = atob(encoded);
+        setSharedPhone(decoded);
+        
+        // Tự động xóa tham số p khỏi thanh địa chỉ để bảo mật và sạch sẽ
+        const url = new URL(window.location.href);
+        url.searchParams.delete('p');
+        window.history.replaceState({}, '', url.toString());
+      } catch (e) {
+        console.error('Lỗi giải mã số điện thoại', e);
+      }
+    }
+  }, [encoded])
 
   const formatPrice = (price: any) =>
     Number(price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
@@ -199,7 +221,7 @@ export default function RoomClient({ data, id }: RoomClientProps) {
                 </svg>
                 <span className={styles.contactLabel}>Liên hệ thuê phòng</span>
               </div>
-              <div className={styles.contactPhone}>0901 222 333</div>
+              <div className={styles.contactPhone}>{sharedPhone || '0901 222 333'}</div>
             </div>
             <div className={styles.ctaNote}>Phản hồi trong vòng 30 phút · Xem phòng miễn phí</div>
           </div>
