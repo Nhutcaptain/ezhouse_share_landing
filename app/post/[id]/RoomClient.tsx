@@ -34,7 +34,8 @@ export default function RoomClient({ data, id }: RoomClientProps) {
         };
 
         const decoded = decodeFromHex(encoded).trim();
-        console.log('Landing Page - Giải mã Hex thành công:', decoded);
+        console.log('Landing Page - Hex length:', encoded.length, 'Decoded length:', decoded.length);
+        console.log('Landing Page - Dữ liệu thực tế:', JSON.stringify(decoded));
         setSharedPhone(decoded);
         
         // Tự động xóa tham số p khỏi thanh địa chỉ để bảo mật và sạch sẽ
