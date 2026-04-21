@@ -33,7 +33,7 @@ export default function RoomClient({ data, id }: RoomClientProps) {
           return match.map(h => String.fromCharCode(parseInt(h, 16))).join('');
         };
 
-        const decoded = decodeFromHex(encoded);
+        const decoded = decodeFromHex(encoded).trim();
         console.log('Landing Page - Giải mã Hex thành công:', decoded);
         setSharedPhone(decoded);
         
