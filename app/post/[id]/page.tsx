@@ -12,6 +12,7 @@ async function getRoomData(id: string) {
   try {
     // API is fully configured on server
     const res = await fetch(`${API}/rooms/${id}/share-info`, { cache: 'no-store' });
+    console.log(res)
     if (!res.ok) return null;
     return res.json();
   } catch (error) {

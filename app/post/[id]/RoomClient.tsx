@@ -23,9 +23,18 @@ export default function RoomClient({ data, id }: RoomClientProps) {
   const [sharedPhone, setSharedPhone] = useState<string | null>(null)
 
   useEffect(() => {
+    console.log('Landing Page - Nhận được p:', encoded);
     if (encoded) {
       try {
-        const decoded = atob(encoded);
+        // Giải mã từ chuỗi Hex sang chuỗi gốc
+        const decodeFromHex = (hex: string) => {
+          const match = hex.match(/.{1,2}/g);
+          if (!match) return '';
+          return match.map(h => String.fromCharCode(parseInt(h, 16))).join('');
+        };
+
+        const decoded = decodeFromHex(encoded);
+        console.log('Landing Page - Giải mã Hex thành công:', decoded);
         setSharedPhone(decoded);
         
         // Tự động xóa tham số p khỏi thanh địa chỉ để bảo mật và sạch sẽ
